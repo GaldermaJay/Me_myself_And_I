@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 const CENTER_LABEL = "마운자로";
 
@@ -188,6 +188,12 @@ const getGoogleSearchUrl = (keyword) =>
   `https://www.google.com/search?q=${encodeURIComponent(`${CENTER_LABEL} ${keyword}`)}`;
 
 export default function MounjaroNetworkGraph() {
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
   const rankedData = useMemo(() => {
     return KEYWORDS.map((keyword) => ({ keyword, count: TREND_COUNTS[keyword] ?? 650 }))
       .sort((a, b) => b.count - a.count)
@@ -244,6 +250,23 @@ export default function MounjaroNetworkGraph() {
 
     return { width, height, cx, cy, nodes };
   }, [rankedData]);
+
+  if (!isMounted) {
+    return (
+      <section style={wrapperStyle} aria-label="마운자로 중심 50개 연관키워드 네트워크">
+        <div style={headerStyle}>
+          <h3 style={titleStyle}>
+            <span className="lilly-mark" style={{ fontWeight: 500 }}>마운자로</span> 연관 검색어 50 Keywords (By Google
+            Analytics Trends) (2026. 02. 22 기준)
+          </h3>
+          <p style={helperStyle}>마운자로와 50개 한국어 키워드를 선으로 직접 연결</p>
+        </div>
+        <div style={{ minHeight: "420px", border: "1px solid #e5e7eb", borderRadius: "14px", display: "grid", placeItems: "center", color: "#6b7280" }}>
+          그래프를 불러오는 중...
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section style={wrapperStyle} aria-label="마운자로 중심 50개 연관키워드 네트워크">
