@@ -1,0 +1,4 @@
+Resume placeholder
+
+Replace this file with your actual resume PDF and update links:
+- /resume-placeholder.txt -> /resume.pdf
